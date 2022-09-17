@@ -11,6 +11,7 @@ class Board
 
     turn(stackNumber, x, y)
     {
+        // This occurs 
         if(stackNumber == 2)
         {
             const tile = this.pieces[x][y]
@@ -24,6 +25,7 @@ class Board
             {
                 buffer = tile.pop();
                 selected[this.turnNumber] = 3;
+
             }
         }
         else if(stackNumber == 3)
@@ -34,28 +36,20 @@ class Board
             }
             else
             {
-                let success = false; 
                 const piece = buffer;
-                if(this.pieces[x][y] == null)
+                if(piece.value > this.getPieceValue(x,y))
                 {
-                    this.pieces[x][y] = [piece];
-                    success = true;
-                }
-                else
-                {
-                    const topPiece = this.pieces[x][y][this.pieces[x][y].length-1];
-                    if(topPiece.value < piece.value)
+                    if(this.pieces[x][y] == null)
                     {
-                        this.pieces[x][y].push(piece);
-                        success = true;
+                        this.pieces[x][y] = [piece];
                     }
                     else
                     {
-                        console.log('Cannot push piece');
+                        this.pieces[x][y].push(piece);
                     }
-                }
-                if(success)
-                {
+                    buffer = null;
+                    selected[this.turnNumber] = 2;
+
                     if(this.turnNumber == 1)
                     {
                         this.turnNumber = 0;
@@ -64,10 +58,13 @@ class Board
                     {
                         this.turnNumber = 1;
                     }
-                    buffer = null;
+                }
+                else
+                {
+                    console.log('Cannot push piece');
                 }
             }
-            this.checkWin();
+            console.log(this.checkWin());
         }
         else
         {
@@ -77,28 +74,17 @@ class Board
             }
             else
             {
-                let success = false; 
                 const piece = this.players[this.turnNumber].takeGoblet(stackNumber);
-                if(this.pieces[x][y] == null)
+                if(piece.value > this.getPieceValue(x, y))
                 {
-                    this.pieces[x][y] = [piece];
-                    success = true;
-                }
-                else
-                {
-                    const topPiece = this.pieces[x][y][this.pieces[x][y].length-1];
-                    if(topPiece.value < piece.value)
+                    if(this.pieces[x][y] == null)
                     {
-                        this.pieces[x][y].push(piece);
-                        success = true;
+                        this.pieces[x][y] = [piece];
                     }
                     else
                     {
-                        console.log('Cannot push piece');
+                        this.pieces[x][y].push(piece);
                     }
-                }
-                if(success)
-                {
                     if(this.turnNumber == 1)
                     {
                         this.turnNumber = 0;
@@ -110,21 +96,36 @@ class Board
                 }
                 else
                 {
+                    console.log("Cannot push piece");
                     this.players[this.turnNumber].pieces[stackNumber].push(piece);
                 }
             }
+            console.log(this.checkWin());
         }
-        console.log(this.checkWin());
+
     }
 
     getPieceNumber(x, y)
     {
         const tmp = this.pieces[x][y];
-        if(tmp == null)
+        if(tmp == null || tmp.length == 0)
         {
             return 0;
         }
         return this.pieces[x][y][this.pieces[x][y].length - 1].playerNum;
+    }
+
+    getPieceValue(x, y)
+    {
+        const tmp = this.pieces[x][y];
+        if(tmp == null || tmp.length == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return tmp[tmp.length - 1].value;
+        }
     }
 
     checkWin()

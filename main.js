@@ -112,7 +112,7 @@ canvas.addEventListener('click', function(e){
     {
         turn(selected[board.turnNumber], tile.x, tile.y);
     }
-    drawBoardPieces();
+    drawBoard();
 });
 
 function drawRectTile(x, y, color, size)
@@ -155,6 +155,7 @@ function drawBoardPieces()
 function drawBoard()
 {
     drawBackground();
+    drawBoardPieces();
 }
 
 function turn(stackNumber, x, y)
