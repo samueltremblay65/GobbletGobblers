@@ -1,19 +1,10 @@
 class Player{
 
-    constructor(name, number)
+    constructor(name, number, color)
     {
         this.name = name;
         this.number = number;
-        this.color = 'red';
-
-        if(this.name == 'Sam')
-        {
-            this.color = 'pink';
-        }
-        else if(this.name == 'Elyse')
-        {
-            this.color = 'lime';
-        }
+        this.color = color;
 
         this.pieces = [[], []];
         for(let i = 0; i < 2; i++)
@@ -29,6 +20,15 @@ class Player{
     {
         const piece = this.pieces[stackNumber].pop();
         return piece;
+    }
+
+    getTopPiece(stackNumber)
+    {
+        if(this.pieces[stackNumber][this.pieces[stackNumber].length - 1] == null)
+        {
+            return 0;
+        }
+        return this.pieces[stackNumber][this.pieces[stackNumber].length - 1].value;
     }
 
     getColor()

@@ -25,7 +25,6 @@ class Board
             {
                 buffer = tile.pop();
                 selected[this.turnNumber] = 3;
-
             }
         }
         else if(stackNumber == 3)
@@ -64,7 +63,6 @@ class Board
                     console.log('Cannot push piece');
                 }
             }
-            console.log(this.checkWin());
         }
         else
         {
@@ -100,9 +98,14 @@ class Board
                     this.players[this.turnNumber].pieces[stackNumber].push(piece);
                 }
             }
-            console.log(this.checkWin());
         }
-
+        updateStackButtons();
+        updateTurnControl();
+        if(this.checkWin())
+        {
+            alert("Game over!");
+        }
+        
     }
 
     getPieceNumber(x, y)

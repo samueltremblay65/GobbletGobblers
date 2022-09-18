@@ -3,8 +3,8 @@ let ctx = canvas.getContext("2d");
 
 // Game setup
 
-const player1 = new Player('Sam', 1);
-const player2 = new Player('Elyse', 2);
+const player1 = new Player('Player 1', 1, "#d457a0");
+const player2 = new Player('Player 2', 2, "#abeb34");
 
 const board = new Board(4, player1, player2);
 
@@ -18,9 +18,12 @@ const CANVAS_WIDTH = canvas.width / CANVAS_TILE;
 
 // DOM constants
 const stack_buttons = [[document.getElementById('stack_p1_1'), document.getElementById('stack_p1_2'), document.getElementById('stack_p1_move')], [document.getElementById('stack_p2_1'),  document.getElementById('stack_p2_2'), document.getElementById('stack_p2_move')]];
+const turn_control = document.getElementById("turn_control");
 
 let selected = [0, 0];
 let buffer;
+
+setup();
 
 function changeSelected(playerNum, selection)
 {
@@ -167,4 +170,28 @@ function turn(stackNumber, x, y)
     }
 }
 
-drawBoard();
+function updateStackButtons()
+{
+    stack_buttons[0][0].innerHTML = "top piece : " + player1.getTopPiece(0);
+    stack_buttons[0][1].innerHTML = "top piece : " + player1.getTopPiece(1);
+    stack_buttons[1][0].innerHTML = "top piece : " + player2.getTopPiece(0);
+    stack_buttons[1][1].innerHTML = "top piece : " + player2.getTopPiece(1);
+}
+
+function setup()
+{
+    drawBoard()
+    updateStackButtons();
+}
+
+function updateTurnControl()
+{
+    if(board.turnNumber == 0)
+    {
+        turn_control.innerHTML = player1.name + "'s turn";
+    }
+    else
+    {
+        turn_control.innerHTML = player2.name + "'s turn";
+    }
+}
