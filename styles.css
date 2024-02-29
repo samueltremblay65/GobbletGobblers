@@ -26,6 +26,14 @@ body {
     color: white;
 }
 
+.green {
+    background-color: #719e24;
+}
+
+.red {
+    background-color: #c05091;
+}
+
 canvas {
     margin: 0;
     padding: 0;

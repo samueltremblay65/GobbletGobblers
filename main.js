@@ -3,8 +3,8 @@ let ctx = canvas.getContext("2d");
 
 // Game setup
 
-const player1 = new Player('Player 1', 1, "#d457a0");
-const player2 = new Player('Player 2', 2, "#abeb34");
+const player1 = new Player('Player 1', 1, "#e66cb3");
+const player2 = new Player('Player 2', 2, "#a2e330");
 
 const BOARD_SIZE = 4;
 const board = new Board(BOARD_SIZE, player1, player2);
