@@ -36,3 +36,7 @@ canvas {
 h1, h2, h3 {
     margin: 8px;
 }
+
+h1 {
+    font-size: 48px;
+}
