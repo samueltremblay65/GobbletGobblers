@@ -24,6 +24,14 @@ class Player{
 
     getTopPiece(stackNumber)
     {
+        if(stackNumber == 3)
+        {
+            return buffer.value;
+        }
+        if(this.pieces[stackNumber] == null)
+        {
+            return 0;
+        }
         if(this.pieces[stackNumber][this.pieces[stackNumber].length - 1] == null)
         {
             return 0;

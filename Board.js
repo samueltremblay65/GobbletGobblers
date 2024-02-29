@@ -11,7 +11,7 @@ class Board
 
     turn(stackNumber, x, y)
     {
-        // This occurs 
+        // Moving tile
         if(stackNumber == 2)
         {
             const tile = this.pieces[x][y]
@@ -27,6 +27,7 @@ class Board
                 selected[this.turnNumber] = 3;
             }
         }
+        // Placing moved tile
         else if(stackNumber == 3)
         {            
             if(!buffer)
@@ -64,6 +65,7 @@ class Board
                 }
             }
         }
+        // First and second stack
         else
         {
             if(this.players[this.turnNumber].pieces[stackNumber].length <= 0)
@@ -99,13 +101,21 @@ class Board
                 }
             }
         }
+
         updateStackButtons();
         updateTurnControl();
+
         if(this.checkWin())
         {
-            alert("Game over!");
+            if(this.turnNumber == 0)
+            {
+                this.gameState = 2;
+            }
+            else
+            {
+                this.gameState = 1;
+            }
         }
-        
     }
 
     getPieceNumber(x, y)
@@ -180,8 +190,7 @@ class Board
         }
 
         // Checking diagonals
-
-        // Change if board size changes
+        // TODO: Make smarter algorithm to detect diagonals for other board sizes
 
         if(this.getPieceNumber(0,0) == this.getPieceNumber(1,1) && this.getPieceNumber(2,2) == this.getPieceNumber(3,3) && this.getPieceNumber(0,0) == this.getPieceNumber(3,3) && this.getPieceNumber(0,0) != 0)
         {

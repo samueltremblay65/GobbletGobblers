@@ -6,7 +6,8 @@ let ctx = canvas.getContext("2d");
 const player1 = new Player('Player 1', 1, "#d457a0");
 const player2 = new Player('Player 2', 2, "#abeb34");
 
-const board = new Board(4, player1, player2);
+const BOARD_SIZE = 4;
+const board = new Board(BOARD_SIZE, player1, player2);
 
 // Constants
 const DARK_BLUE = '#3262a8';
@@ -22,6 +23,8 @@ const turn_control = document.getElementById("turn_control");
 
 let selected = [0, 0];
 let buffer;
+
+let currentHoverTile = null;
 
 setup();
 
@@ -59,6 +62,35 @@ stack_buttons[1][2].addEventListener('click', function(){changeSelected(1, 2);})
 // Change initial selection of stacks
 changeSelected(0, 0);
 changeSelected(1, 0);
+
+// Add preview for next tile
+document.addEventListener("mousemove", (event) => {
+    
+    const currentTile = getClickedTile(event);
+
+    if(isOnBoard(currentTile))
+    {
+        if(currentHoverTile == null || !(currentTile.x == currentHoverTile.x && currentTile.y == currentHoverTile.y))
+        {
+            currentHoverTile = currentTile;
+            
+            // Show preview indicator
+            const player = board.players[board.turnNumber];
+            const color = player.color;
+            const stack = selected[board.turnNumber];
+            const value = player.getTopPiece(stack);
+
+            drawBoard();
+            drawPreviewTile(currentHoverTile.x, currentHoverTile.y, color, value);
+        }
+    }
+    else
+    {
+        drawBoard();
+        currentHoverTile = null;
+    }
+});
+
 
 // Utility functions 
 
@@ -98,6 +130,21 @@ function getMousePosition(event) {
     return {x: x, y: y};
 }
 
+function isOnBoard(tile)
+{
+    if(tile.x < 0 || tile.x >= BOARD_SIZE)
+    {
+        return false;
+    }
+
+    if(tile.y < 0 || tile.y >= BOARD_SIZE)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 
 // get clicked tile
 function getClickedTile(event)
@@ -106,19 +153,43 @@ function getClickedTile(event)
     return {x: Math.floor(position.x / CANVAS_TILE), y: Math.floor(position.y / CANVAS_TILE)};
 }
 
-
 // Click listener in charge of turns
 canvas.addEventListener('click', function(e){
     const tile = getClickedTile(e);
-    // If game is still playing
-    if(board.gameState == -1)
+
+    if(isOnBoard(tile))
     {
-        turn(selected[board.turnNumber], tile.x, tile.y);
+        // If game is still playing
+        if(board.gameState == -1)
+        {
+            turn(selected[board.turnNumber], tile.x, tile.y);
+        }
+        drawBoard();
     }
-    drawBoard();
 });
 
 function drawRectTile(x, y, color, size)
+{
+    ctx.fillStyle = color;
+    if(size == 1)
+    {
+        ctx.fillRect(x * CANVAS_TILE + 3 * CANVAS_TILE / 8, y * CANVAS_TILE + 3 * CANVAS_TILE / 8, CANVAS_TILE / 4, CANVAS_TILE / 4);
+    }
+    else if (size == 2)
+    {
+        ctx.fillRect(x * CANVAS_TILE + CANVAS_TILE / 4, y * CANVAS_TILE + CANVAS_TILE / 4, CANVAS_TILE / 2, CANVAS_TILE/2);
+    }
+    else if (size == 3)
+    {
+        ctx.fillRect(x * CANVAS_TILE + CANVAS_TILE / 8, y * CANVAS_TILE + CANVAS_TILE / 8, 3 * CANVAS_TILE / 4, 3 * CANVAS_TILE / 4);
+    }
+    else if (size == 4)
+    {
+        ctx.fillRect(x * CANVAS_TILE, y * CANVAS_TILE, CANVAS_TILE, CANVAS_TILE);
+    }
+}
+
+function drawPreviewTile(x, y, color, size)
 {
     ctx.fillStyle = color;
     if(size == 1)
@@ -167,6 +238,7 @@ function turn(stackNumber, x, y)
     if(board.gameState!=-1)
     {
         console.log("Game over!");
+        turn_control.innerHTML = "Player " + board.gameState + " wins";
     }
 }
 
